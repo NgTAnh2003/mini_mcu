@@ -3,7 +3,7 @@
  * @brief   Giao diện công khai (Public API) của module Mcal/Mcu cho dự án học
  * AUTOSAR Classic.
  * @details File này chỉ công khai các kiểu dữ liệu trừu tượng, mã định danh,
- * khai báo bảng cấu hình và 2 hàm API công khai (Mcu_Init, Mcu_InitClock). File
+ * bảng cấu hình và các hàm khởi tạo, chọn và đọc nguồn xung. File
  * này KHÔNG include "stm32f1xx.h" và không để lộ địa chỉ hay kiểu thanh ghi của
  * STM32 ra các tầng gọi bên trên. Phạm vi chỉ quản lý nguồn xung hệ thống
  * (không PLL, không reset, không sleep/RAM).
@@ -192,5 +192,12 @@ void Mcu_Init(const Mcu_ConfigType *ConfigPtr);
  * an toàn.
  */
 Std_ReturnType Mcu_InitClock(Mcu_ClockType ClockSetting);
+
+/**
+ * @brief Đọc nguồn xung hệ thống đang hoạt động. Có thể gọi từ lúc reset.
+ * @return Mã trạng thái hai bit: 0 nguồn nội, 1 nguồn ngoài, 2 PLL (mạch
+ * nhân xung), 3 dành riêng. Hàm chỉ đọc và không đổi cấu hình.
+ */
+uint8 Mcu_GetClockSourceStatus(void);
 
 #endif /* MCU_H */

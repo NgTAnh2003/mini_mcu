@@ -15,7 +15,7 @@
 bool Board_Init(void);
 
 /**
- * @brief Gọi một lần sau Board_Init để mở cổng phát và gửi dòng khởi động.
+ * @brief Gọi một lần sau Board_Init để mở cổng phát và gửi dòng khởi động cùng nguồn xung thực tế.
  * @return true khi toàn bộ byte đã được ghi vào ngoại vi, false khi có lỗi.
  */
 bool Board_SendStartupMessage(void);

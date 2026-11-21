@@ -70,3 +70,7 @@ Người học đã nạp firmware phát dòng khởi động lên bo. CH340 xu�
 ### Docklight đã nhận được dòng khởi động ngày 21/11/2026
 
 Sau khi cài lại driver CH340, người học xác nhận Docklight hiển thị đúng “mini_mcu ready”, khớp chuỗi khởi động của firmware. Đã kiểm chứng bo phát dữ liệu qua PA9 và máy tính nhận được qua CH340 ở 115200 baud, 8 bit dữ liệu, không parity, 1 bit dừng. Chiều nhận trên bo vẫn cần kiểm thử riêng.
+
+### Kiểm tra nguồn xung thực tế qua Docklight
+
+Firmware đọc hai bit trạng thái nguồn xung trong thanh ghi cấu hình xung và gửi kết quả sau dòng khởi động. Đã build cho STM32F103C6T6 và STM32F103C8T6, kiểm thử thư viện UART trên máy tính đạt 1.315/1.315. Bước tiếp theo là nạp đúng firmware cho bo, reset và ghi nhận dòng SYSCLK. Giá trị mong đợi khi chạy bằng thạch anh ngoài là HSE (SWS=01).

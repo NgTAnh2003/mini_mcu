@@ -7,6 +7,7 @@
 #include "Mcu.h"
 #include "Port.h"
 #include "Uart.h"
+#include <string.h>
 
 bool Board_Init(void)
 {
@@ -31,14 +32,23 @@ bool Board_SendStartupMessage(void)
         .TxMode = UART_XFER_POLLING,
         .RxMode = UART_XFER_DISABLED
     };
+    static const char *const status_lines[] = {
+        "SYSCLK: HSI (SWS=00)\r\n", "SYSCLK: HSE (SWS=01)\r\n",
+        "SYSCLK: PLL (SWS=10)\r\n", "SYSCLK: reserved (SWS=11)\r\n"
+    };
     static const uint8 message[] = "mini_mcu ready\r\n";
+    const char *status = status_lines[Mcu_GetClockSourceStatus()];
 
     if (Uart_Init(UART_PORT_1, &config) != UART_STATUS_OK) {
         return false;
     }
 
     /* Bỏ byte kết thúc chuỗi C. Giới hạn chờ tính bằng lượt kiểm tra mỗi byte. */
-    return Uart_TransmitPolling(UART_PORT_1, message, sizeof(message) - 1u,
+    if (Uart_TransmitPolling(UART_PORT_1, message, sizeof(message) - 1u,
+                             NULL_PTR, UART_TIMEOUT_LOOPS(100000u)) != UART_STATUS_OK) {
+        return false;
+    }
+    return Uart_TransmitPolling(UART_PORT_1, (const uint8 *)status, strlen(status),
                                 NULL_PTR, UART_TIMEOUT_LOOPS(100000u)) == UART_STATUS_OK;
 }
 

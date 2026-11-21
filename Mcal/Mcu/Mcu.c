@@ -361,3 +361,7 @@ Std_ReturnType Mcu_InitClock(Mcu_ClockType ClockSetting) {
   SystemCoreClockUpdate();
   return E_OK;
 }
+uint8 Mcu_GetClockSourceStatus(void) {
+  /* Hai bit SWS [3:2] phản ánh nguồn thực tế mà phần cứng đang dùng. */
+  return (uint8)((RCC->CFGR & RCC_CFGR_SWS) >> RCC_CFGR_SWS_Pos);
+}
