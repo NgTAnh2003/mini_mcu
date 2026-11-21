@@ -23,6 +23,18 @@ static const Port_PinConfigType Port_PinConfigs[PORT_NUM_OF_CONFIGURED_PINS] =
         .Speed               = PORT_PIN_SPEED_2MHZ,
         .DirectionChangeable = FALSE,
         .ModeChangeable      = FALSE
+    },
+    /* USART1 điều khiển PA9 qua chức năng ngoại vi, chân RX chưa dùng. */
+    {
+        .PinId               = PortConf_PortPin_USART1_TX_PA9,
+        .Direction           = PORT_PIN_OUT,
+        .Mode                = PORT_PIN_MODE_ALT,
+        .InitialLevel        = PORT_PIN_LEVEL_HIGH,
+        .Pull                = PORT_PIN_PULL_NONE,
+        .OutputType          = PORT_PIN_OUT_PUSHPULL,
+        .Speed               = PORT_PIN_SPEED_2MHZ,
+        .DirectionChangeable = FALSE,
+        .ModeChangeable      = FALSE
     }
 };
 

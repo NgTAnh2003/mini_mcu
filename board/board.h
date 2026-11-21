@@ -13,6 +13,13 @@
  * @return true khi chip xác nhận đã chuyển nguồn; false khi hết lượt chờ.
  */
 bool Board_Init(void);
+
+/**
+ * @brief Gọi một lần sau Board_Init để mở cổng phát và gửi dòng khởi động.
+ * @return true khi toàn bộ byte đã được ghi vào ngoại vi, false khi có lỗi.
+ */
+bool Board_SendStartupMessage(void);
+
 /**
  * @brief Điều khiển đèn tích hợp sau khi Board_Init đã cấu hình chân.
  * @param[in] on Bật đèn khi true, tắt khi false.

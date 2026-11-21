@@ -24,7 +24,7 @@
  * NUMBER OF CONFIGURED PINS IN PORT_CONFIG
  *============================================================================*/
 /** @brief Số mục cấu hình chân và dung lượng bảng trạng thái tương ứng. */
-#define PORT_NUM_OF_CONFIGURED_PINS     (1u)
+#define PORT_NUM_OF_CONFIGURED_PINS     (2u)
 
 /*==============================================================================
  * SYMBOLIC NAMES FOR PORT PINS
@@ -33,5 +33,8 @@
  *============================================================================*/
 /** @brief Chân đèn tích hợp: cổng C (2), chân 13, mã 2 × 16 + 13. */
 #define PortConf_PortPin_LED_PC13       (45u)
+
+/** @brief Chân phát mặc định của USART1, cổng A chân 9. */
+#define PortConf_PortPin_USART1_TX_PA9  (9u)
 
 #endif /* PORT_CFG_H */

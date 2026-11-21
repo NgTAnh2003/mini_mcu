@@ -54,3 +54,19 @@ Người học đã nạp firmware tích hợp Port và Dio lên STM32F103C6T6 q
 ## Tích hợp quản lý xung nhịp ngày 21/11/2026
 
 Board_Init chuẩn bị chân đèn, khởi tạo Mcu rồi yêu cầu nguồn thạch anh ngoài 8 MHz. So sánh kết quả với E_OK để chuyển đúng sang bool. Đã build lại đầy đủ cho STM32F103C6T6 và STM32F103C8T6. Cần nạp lại để xác nhận nguồn xung và đèn trên bo với firmware mới.
+
+Ngày 21/11: Người học báo test UART trên host đạt. Đã đối chiếu cấu trúc: Dio có đặc tả AUTOSAR Classic; UART là driver riêng, cách tách phần tính baud, bộ đệm và DMA do dự án quyết định. Kiểm thử phần cứng UART chưa được xác nhận.
+
+Đã chuyển trọn 11 file driver UART sang Cdd/Uart và cập nhật đường dẫn build, test và clangd. Test host đạt 649 kiểm tra ở chế độ 8 bit và 666 ở chế độ 9 bit. Firmware build đạt trên cả hai cấu hình chip. Chưa kiểm chứng truyền/nhận trên bo.
+
+## Gửi dòng khởi động qua CH340
+
+Đã cấu hình chân PA9 phát bằng USART1, 115200 8N1, gửi mini_mcu ready một lần trước vòng nháy đèn. Build đạt trên cả hai chip; test host đạt 649/649 và 666/666. Chờ xác nhận dòng chữ trên cổng COM sau khi nạp và reset.
+
+### Tạm dừng khi kiểm tra UART với Hercules
+
+Người học đã nạp firmware phát dòng khởi động lên bo. CH340 xuất hiện ở COM4. Docklight và PowerShell báo lỗi khi mở cổng; người học cho biết Hercules kết nối được. Nhấn reset bo thấy đèn CH340 chớp nhưng Hercules chưa hiện chữ. Khi thử riêng CH340 qua USB với TXD nối RXD, bấm Send trong Hercules chưa thấy đèn chớp hay nhận lại dữ liệu. Chưa xác định được nguyên nhân. Khi tiếp tục, kiểm tra nút Open/Close trong tab Serial của Hercules hoặc xem ảnh toàn bộ tab trước khi thử lại.
+
+### Docklight đã nhận được dòng khởi động ngày 21/11/2026
+
+Sau khi cài lại driver CH340, người học xác nhận Docklight hiển thị đúng “mini_mcu ready”, khớp chuỗi khởi động của firmware. Đã kiểm chứng bo phát dữ liệu qua PA9 và máy tính nhận được qua CH340 ở 115200 baud, 8 bit dữ liệu, không parity, 1 bit dừng. Chiều nhận trên bo vẫn cần kiểm thử riêng.

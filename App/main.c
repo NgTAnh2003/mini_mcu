@@ -12,6 +12,9 @@ int main(void)
     unsigned delay_count = hse_active ? 400000u : 100000u;
     bool led_on = true;
 
+    /* Lỗi cổng nối tiếp vẫn cho phép quan sát chương trình qua đèn. */
+    (void)Board_SendStartupMessage();
+
     for (;;) {
         Board_SetLed(led_on);
         for (volatile unsigned i = 0; i < delay_count; ++i) {
