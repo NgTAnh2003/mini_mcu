@@ -1,1 +1,18 @@
+# Firmware, kết quả kiểm thử và bản đồ liên kết do Makefile tạo
 /build/
+
+# Cơ sở dữ liệu biên dịch của Bear và bộ nhớ đệm của clangd
+/compile_commands.json
+/.cache/
+
+# File tạm của trình soạn thảo và hệ điều hành
+*~
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Công cụ và tài liệu học tập cục bộ
+/CAN_Phan1_Nen_tang_giao_thuc.md
+/CAN_Phan2_FD_DBC_UDS_Linux.md
+/Roadmap_MCU_Automotive_v3.md

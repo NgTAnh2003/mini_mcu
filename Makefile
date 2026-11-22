@@ -72,7 +72,7 @@ clean:
 # 4. Cập nhật database cho VS Code (clangd) khi thêm file/thư mục mới
 compdb: clean
 	bear -- make all MCU=$(MCU) UART_DMA=$(UART_DMA) UART_9BIT=$(UART_9BIT)
-	bear --append -- make test_uart_lib
+	bear --append -- make test
 
 # 5. Unit test phần độc lập phần cứng của thư viện UART trên PC (host)
 HOST_CC ?= gcc
@@ -88,5 +88,20 @@ test_uart_lib: $(UART_HOST_TEST_SRCS)
 	@echo "=== [HOST TEST 2/2] UART 9-bit enabled ==="
 	$(HOST_CC) $(HOST_CFLAGS) -DUART_CFG_SUPPORT_9BIT=1U $(UART_HOST_TEST_SRCS) -o $(HOST_BINDIR)/test_uart_9bit
 	$(HOST_BINDIR)/test_uart_9bit
+
+MCU_HOST_SRCS := Mcal/Mcu/Mcu.c Mcal/Mcu/Mcu_PBcfg.c Services/Det/Det.c Tests/Mcu/test_mcu_host.c
+MCU_HOST_FLAGS := -fno-pie -no-pie -std=c11 -Wall -Wextra -Werror -g3 -ICommon -IServices/Det -IMcal/Mcu -ITests/Mcu/Mock \
+                  -isystem $(DEVICE)/Include -isystem $(CMSIS)/Include -DSTM32F103x6 \
+                  -include Mcu_HostHw.h -Wl,--wrap=Det_ReportError
+
+.PHONY: test test_mcu
+test: test_uart_lib test_mcu
+
+test_mcu:
+	@mkdir -p $(HOST_BINDIR)
+	$(HOST_CC) $(MCU_HOST_FLAGS) $(MCU_HOST_SRCS) -o $(HOST_BINDIR)/test_mcu
+	$(HOST_BINDIR)/test_mcu
+	$(HOST_CC) $(MCU_HOST_FLAGS) -DMCU_DEM_ERROR_REPORT=1U $(MCU_HOST_SRCS) -o $(HOST_BINDIR)/test_mcu_dem
+	$(HOST_BINDIR)/test_mcu_dem
 
 -include $(OBJECTS:.o=.d)

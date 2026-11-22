@@ -30,5 +30,12 @@ SECTIONS
         . = ALIGN(4);
         _ebss = .;
     } > RAM
-    end = _ebss;
+    .noinit (NOLOAD) : ALIGN(4) {
+        _snoinit = .;
+        *(.noinit)
+        *(.noinit.*)
+        . = ALIGN(4);
+        _enoinit = .;
+    } > RAM
+    end = _enoinit;
 }

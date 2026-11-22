@@ -74,3 +74,21 @@ Sau khi cài lại driver CH340, người học xác nhận Docklight hiển th�
 ### Kiểm tra nguồn xung thực tế qua Docklight
 
 Firmware đọc hai bit trạng thái nguồn xung trong thanh ghi cấu hình xung và gửi kết quả sau dòng khởi động. Đã build cho STM32F103C6T6 và STM32F103C8T6, kiểm thử thư viện UART trên máy tính đạt 1.315/1.315. Bước tiếp theo là nạp đúng firmware cho bo, reset và ghi nhận dòng SYSCLK. Giá trị mong đợi khi chạy bằng thạch anh ngoài là HSE (SWS=01).
+
+### Làm quen với OpenOCD
+
+Đã thảo luận đường nạp qua ST-LINK và ý nghĩa của verify, reset. Chờ người học giải thích kết quả verify và kiểm tra dòng SYSCLK sau reset.
+
+Người học tạm dừng để tự học các kiến thức cơ bản về OpenOCD. Khi quay lại, tiếp tục từ bước nạp firmware đúng bo, reset và đọc dòng SYSCLK trên Docklight. Chưa ghi nhận kết quả SYSCLK thực tế.
+
+### Review lại driver Mcu ngày 22/11/2026
+
+Đã biên dịch riêng driver và cấu hình post-build cho STM32F103C6T6 và STM32F103C8T6. Đã kiểm tra section object và liên kết thử object cấu hình bằng linker script của từng chip. Vùng RAM mẫu đã vào .noinit.mcu, nhưng ký hiệu end vẫn trùng đầu vùng trong ELF kiểm tra. Đường STOP đã phân biệt PLL đang chờ và PLL đã phân phối. Cần kiểm thử chuyển xung sau timeout, tính nhất quán của ảnh chụp chẩn đoán, và đánh thức trên bo trước khi xác nhận hành vi. Chưa ghi nhận hoàn thành buổi học mới.
+
+### Tích hợp kiểm thử Mcu với thư viện dùng chung
+
+Makefile gốc có test_mcu và test. Test MCU dùng Common/Std_Types.h, liên kết Services/Det/Det.c thật và chạy hai cấu hình DEM tắt/bật với bộ giả DEM khi bật. Đã sửa mô phỏng chuyển xung thất bại, kiểm tra mã DET, vùng RAM 1/2/4 byte, giữ PLL đang chờ qua STOP và lỗi HSE khi thức dậy. Test host MCU và UART đạt; driver và bảng cấu hình build riêng được cho cả hai chip. Build firmware còn dừng tại hai tên cũ trong board.c. Linker vẫn đặt end ở đầu vùng .noinit.mcu trong ELF liên kết thử. Cần kiểm tra ánh xạ trên firmware hoàn chỉnh và kiểm chứng đánh thức trên bo.
+
+### Xác nhận bố trí RAM của Mcu sau khi sửa linker
+
+Đã đặt .noinit sau .bss và end sau .noinit trong stm32f103_sections.ld dùng chung. Hai ELF thử liên kết driver Mcu, bảng cấu hình và Det thật cho thấy _ebss = _snoinit = 0x2000002C và _enoinit = end = 0x2000009C. Hai biến trạng thái nằm trong khoảng startup xóa. Ba vùng mẫu chiếm 112 byte ngoài khoảng đó. Test host MCU và UART đạt. Bước còn lại là tích hợp API mới tại board.c và kiểm lại map của firmware đầy đủ trước khi thử trên bo.
